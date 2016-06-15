@@ -1,5 +1,6 @@
 #!/bin/bash
 
+[ -e /etc/default/mvsg ] && . /etc/default/mvsg
 [ -e /etc/sysconfig/mvsg ] && . /etc/sysconfig/mvsg
 
 RANDOM_SLEEP=${RANDOM_SLEEP:-"0"}
