@@ -6,18 +6,15 @@ import time
 import urllib2
 #from multiprocessing import Pool
 
-if len(sys.argv) != 7:
+if len(sys.argv) != 5:
     sys.stderr.write('Not enough (or too many) arguments\n')
     sys.exit(1)
 
-hostname = sys.argv[1].partition('.')[0]
-environment = sys.argv[2]
-application = sys.argv[3]
-prefix = '{0}.{1}.{2}'.format(environment, hostname, application)
+prefix = sys.argv[1]
 
-host = sys.argv[4]
-port = sys.argv[5]
-omit_jvm_stats = sys.argv[6].lower() == 'true'
+host = sys.argv[2]
+port = sys.argv[3]
+omit_jvm_stats = sys.argv[4].lower() == 'true'
 
 timestamp_millis = int(round(time.time() * 1000))
 timestamp = timestamp_millis / 1000

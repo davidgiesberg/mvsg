@@ -14,4 +14,4 @@ Hopefully pretty simple to use, make sure `mvsg.py` and `mvsg.sh` are in the sam
 
 Then run `mvsg.sh` from wherever you've put it. It'll gather the metrics from Solr and fire them over to Carbon.
 
-This will start creating metrics with a prefix of `$ENVIRONMENT.solr.$HOST`. It's a bit specific to my use-case, any customisations are more than welcome.
+By default, this will start creating metrics with a prefix of `$ENVIRONMENT.solr.$HOST`. You can override by setting `PREFIX` to fit your own schema.

@@ -8,15 +8,25 @@ OMIT_JVM_STATS=${OMIT_JVM_STATS:-"false"}
 SCRIPT=`readlink -f $0`
 SCRIPT_PATH=`dirname $SCRIPT`
 
-if [ "xx$ENVIRONMENT" = "xx" ]
+if [ "xx$PREFIX" = "xx" ]
 then
-  echo ENVIRONMENT must be set
-  exit 1
-fi
+  if [ "xx$ENVIRONMENT" = "xx" ]
+    then
+    echo ENVIRONMENT must be set
+    exit 1
+  fi
 
-if [ "xx$APP_NAME" = "xx" ]
-then
-  APP_NAME="solr"
+  if [ "xx$APP_NAME" = "xx" ]
+  then
+    APP_NAME="solr"
+  fi
+
+  if [ "xx$HOSTNAME" = "xx" ]
+  then
+    HOSTNAME=`hostname`
+  fi
+
+  PREFIX="${ENVIRONMENT}.$(echo $HOSTNAME | cut -d'.' -f1).${APP_NAME}"
 fi
 
 if [ "xx$SOLR_HOST" = "xx" ]
@@ -43,12 +53,7 @@ then
   exit 1
 fi
 
-if [ "xx$HOSTNAME" = "xx" ]
-then
-  HOSTNAME=`hostname`
-fi
-
-OUTPUT=`python $SCRIPT_PATH/mvsg.py $HOSTNAME $ENVIRONMENT $APP_NAME $SOLR_HOST $SOLR_PORT $OMIT_JVM_STATS`
+OUTPUT=`python $SCRIPT_PATH/mvsg.py $PREFIX $SOLR_HOST $SOLR_PORT $OMIT_JVM_STATS`
 
 if [ $? = 0 ]
 then
