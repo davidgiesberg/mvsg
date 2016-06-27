@@ -1,5 +1,12 @@
 #!/bin/bash
 
+eexit() {
+    local error_str="$@"
+
+    echo $error_str
+    exit 1
+}
+
 [ -e /etc/default/mvsg ] && . /etc/default/mvsg
 [ -e /etc/sysconfig/mvsg ] && . /etc/sysconfig/mvsg
 
@@ -54,16 +61,19 @@ then
   exit 1
 fi
 
-OUTPUT=`python $SCRIPT_PATH/mvsg.py $PREFIX $SOLR_HOST $SOLR_PORT $OMIT_JVM_STATS`
+(
+  flock --nonblock 200 || eexit "mvsg instance already running"
+  OUTPUT=`python $SCRIPT_PATH/mvsg.py $PREFIX $SOLR_HOST $SOLR_PORT $OMIT_JVM_STATS`
 
-if [ $? = 0 ]
-then
-  if [ "$RANDOM_SLEEP" -gt "0" ]
+  if [ $? = 0 ]
   then
-    # Sleep for random period of time
-    R=$RANDOM
-    R=$(( R %= RANDOM_SLEEP ))
-    sleep $R
+    if [ "$RANDOM_SLEEP" -gt "0" ]
+    then
+      # Sleep for random period of time
+      R=$RANDOM
+      R=$(( R %= RANDOM_SLEEP ))
+      sleep $R
+    fi
+    echo "${OUTPUT}" | nc -w 20 $CARBON_HOST $CARBON_PORT
   fi
-  echo "${OUTPUT}" | nc -w 20 $CARBON_HOST $CARBON_PORT
-fi
+) 200>/var/lock/mvsg
