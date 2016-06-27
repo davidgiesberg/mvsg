@@ -31,7 +31,7 @@ def dispatch_value(core_name, field, value, ts, q=None):
 
 def request_and_response_or_bail(method, url, message):
     attempts = 7
-    for attempt in range(attempts)
+    for attempt in range(attempts):
         try:
             return urllib2.urlopen('http://{0}:{1}{2}'.format(host,port,url)).read()
         except:
