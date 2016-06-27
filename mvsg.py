@@ -30,10 +30,18 @@ def dispatch_value(core_name, field, value, ts, q=None):
         print str
 
 def request_and_response_or_bail(method, url, message):
-    try:
-        return urllib2.urlopen('http://{0}:{1}{2}'.format(host,port,url)).read()
-    except:
-        sys.stderr.write('{0}\n'.format(message))
+    attempts = 10
+    for attempt in range(attempts)
+        try:
+            return urllib2.urlopen('http://{0}:{1}{2}'.format(host,port,url)).read()
+        except:
+            sleepduration = 1.5 ** attempt
+            sys.stderr.write('{0} - sleeping {1}s\n'.format(message,sleepduration))
+            time.sleep(sleepduration)
+        else:
+            break
+    else:
+        sys.stderr.write('Made {0} attempts, exiting'.format(attempts))
         sys.exit(1)
 
 def get_mbeans(json):
